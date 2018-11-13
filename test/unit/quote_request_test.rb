@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class QuoteRequestTest  < Test::Unit::TestCase
+class QuoteRequestTest  < MiniTest::Test
   def setup
   	@quote_request = EShipper::QuoteRequest.new
 
@@ -30,13 +30,13 @@ class QuoteRequestTest  < Test::Unit::TestCase
   	xml = @quote_request.request_body
     doc = Nokogiri::XML(xml)
 
-  	assert !doc.css('QuoteRequest').empty?
-    assert !doc.css('From').empty?
-    assert !doc.css('To').empty?
-    assert !doc.css('Pickup').empty?
-    assert !doc.css('Packages').empty?
-    assert !doc.css('COD').empty?
-    assert !doc.css('CODReturnAddress').empty?
+  	refute_empty doc.css('QuoteRequest')
+    refute_empty doc.css('From')
+    refute_empty doc.css('To')
+    refute_empty doc.css('Pickup')
+    refute_empty doc.css('Packages')
+    refute_empty doc.css('COD')
+    refute_empty doc.css('CODReturnAddress')
   end
   
   def test_generic_options
@@ -47,8 +47,8 @@ class QuoteRequestTest  < Test::Unit::TestCase
 	xml = @quote_request.request_body
     doc = Nokogiri::XML(xml)
     
-    assert !doc.css('QuoteRequest').empty?
-    assert !doc.css('QuoteRequest[dangerousGoodsType]').empty?
-    assert !doc.css('QuoteRequest[isSaturdayService]').empty?
+    refute_empty doc.css('QuoteRequest')
+    refute_empty doc.css('QuoteRequest[dangerousGoodsType]')
+    refute_empty doc.css('QuoteRequest[isSaturdayService]')
   end
 end

@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class CancelReplyTest  < Test::Unit::TestCase
+class CancelReplyTest  < MiniTest::Test
 
   def test_valid_cancel_reply
     cancel_reply = EShipper::CancelReply.new({:order_id => '123'})

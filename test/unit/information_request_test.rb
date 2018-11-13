@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class OrderInformationRequestTest  < Test::Unit::TestCase
+class OrderInformationRequestTest  < MiniTest::Test
   def setup
   	@info_request = EShipper::OrderInformationRequest.new
 
@@ -12,7 +12,7 @@ class OrderInformationRequestTest  < Test::Unit::TestCase
   	xml = @info_request.request_body
     doc = Nokogiri::XML(xml)
 
-  	assert !doc.css('OrderInformationRequest').empty?
-    assert !doc.css('Order').empty?
+  	refute_empty doc.css('OrderInformationRequest')
+    refute_empty doc.css('Order')
   end
 end

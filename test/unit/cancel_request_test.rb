@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class CancelShippingRequestTest  < Test::Unit::TestCase
+class CancelShippingRequestTest  < MiniTest::Test
   def setup
   	@cancel_request = EShipper::CancelShippingRequest.new
 
@@ -12,7 +12,7 @@ class CancelShippingRequestTest  < Test::Unit::TestCase
   	xml = @cancel_request.request_body
     doc = Nokogiri::XML(xml)
 
-  	assert !doc.css('ShipmentCancelRequest').empty?
-    assert !doc.css('Order').empty?
+  	refute_empty doc.xpath('//es:ShipmentCancelRequest')
+    refute_empty doc.xpath('//es:Order')
   end
 end

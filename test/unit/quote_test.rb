@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class QuoteTest  < Test::Unit::TestCase
+class QuoteTest  < MiniTest::Test
 
   def test_valid_quote
     quote = EShipper::Quote.new({:service_id => '123', :service_name => 'fake service'})
@@ -31,12 +31,12 @@ class QuoteTest  < Test::Unit::TestCase
     assert html.include?('4.12')
     assert html.include?('2.0')
     assert html.include?('6.12')
-    assert !html.include?('fake service')
+    refute html.include?('fake service')
 
     quote_with_empty_attr = EShipper::Quote.new({:service_id => '123', :service_name => 'fake service', :service_id => '4',
       :service_name => 'puralator express', :transport_mode => ''})
 
     html = quote_with_empty_attr.description
-    assert !html.include?('transport_mode')
+    refute html.include?('transport_mode')
   end
 end

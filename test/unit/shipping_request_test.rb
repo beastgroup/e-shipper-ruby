@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class ShippingRequestTest  < Test::Unit::TestCase
+class ShippingRequestTest  < MiniTest::Test
   def setup
   	@shipping_request = EShipper::ShippingRequest.new
 
@@ -39,18 +39,18 @@ class ShippingRequestTest  < Test::Unit::TestCase
   	xml = @shipping_request.request_body
   	doc = Nokogiri::XML(xml)
  
-    assert !doc.css('ShippingRequest').empty?
-    assert !doc.css('From').empty?
-    assert !doc.css('To').empty?
-    assert !doc.css('Pickup').empty?
-    assert !doc.css('Packages').empty?
-    assert !doc.css('Reference').empty?
-    assert !doc.css('CustomsInvoice').empty?
-    assert !doc.css('Payment').empty?
-    assert !doc.css('BillTo').empty?
-    assert !doc.css('Item').empty?
-    assert !doc.css('COD').empty?
-    assert !doc.css('CODReturnAddress').empty?
+    refute_empty doc.css('ShippingRequest')
+    refute_empty doc.css('From')
+    refute_empty doc.css('To')
+    refute_empty doc.css('Pickup')
+    refute_empty doc.css('Packages')
+    refute_empty doc.css('Reference')
+    refute_empty doc.css('CustomsInvoice')
+    refute_empty doc.css('Payment')
+    refute_empty doc.css('BillTo')
+    refute_empty doc.css('Item')
+    refute_empty doc.css('COD')
+    refute_empty doc.css('CODReturnAddress')
   end
   
   def test_generic_options
@@ -61,8 +61,8 @@ class ShippingRequestTest  < Test::Unit::TestCase
 	xml = @shipping_request.request_body
     doc = Nokogiri::XML(xml)
     
-    assert !doc.css('ShippingRequest').empty?
-    assert !doc.css('ShippingRequest[dangerousGoodsType]').empty?
-    assert !doc.css('ShippingRequest[isSaturdayService]').empty?
+    refute_empty doc.css('ShippingRequest')
+    refute_empty doc.css('ShippingRequest[dangerousGoodsType]')
+    refute_empty doc.css('ShippingRequest[isSaturdayService]')
   end
 end

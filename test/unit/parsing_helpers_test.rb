@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class ParsingHelpersTest  < Test::Unit::TestCase
+class ParsingHelpersTest  < MiniTest::Test
   include EShipper::ParsingHelpers
 
   def test_try_extract_returns_xml_node_content_or_blank

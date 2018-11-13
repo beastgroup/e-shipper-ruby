@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class OpenStructTest  < Test::Unit::TestCase
+class OpenStructTest  < MiniTest::Test
   
   def test_validation_of_any_descendants
     address = EShipper::Address.new({:id => "123", :company => "fake company", :address1 => "650 CIT Drive", 
