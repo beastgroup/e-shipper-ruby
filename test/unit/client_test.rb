@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class ClientTest  < Test::Unit::TestCase
+class ClientTest  < MiniTest::Test
 
   def test_we_instanciate_a_singleton_instance
     assert_raise(NoMethodError) { EShipper::Client.new }
@@ -10,38 +10,38 @@ class ClientTest  < Test::Unit::TestCase
 
   def test_initialize_attrs_from_config_file
     client = EShipper::Client.instance
-    assert_not_nil client.username
-    assert_not_nil client.password
-    assert_equal 'http://test.eshipper.com/eshipper/rpc2', client.url
+    refute_nil client.username
+    refute_nil client.password
+    assert_equal EShipper::Constants::TEST_URL, client.url
   end
-    
+
   def test_parse_quotes_returns_sorted_quotes_by_increasing_total_charge
     client = EShipper::Client.instance
     xml_path = "#{File.dirname(__FILE__)}/../support/quote.xml"
     doc = Nokogiri::XML(File.open(xml_path))
     Nokogiri.stubs(:XML).returns doc
-    
+
     result = client.parse_quotes({})
     assert_equal 4, result.count
-    assert result[0].is_a?(EShipper::Quote) 
+    assert result[0].is_a?(EShipper::Quote)
     assert_equal '26.21', result[0].total_charge
     assert_equal '49.17', result[1].total_charge
     assert_equal '52.52', result[2].total_charge
     assert_equal '61.13', result[3].total_charge
   end
-  
+
   def test_parse_quotes_returns_nested_e_shipper_objects
     client = EShipper::Client.instance
     xml_path = "#{File.dirname(__FILE__)}/../support/quote.xml"
     doc = Nokogiri::XML(File.open(xml_path))
     Nokogiri.stubs(:XML).returns doc
-    
+
     result = client.parse_quotes({})
     first_result = result[0]
     assert_equal '2', first_result.carrier_id
-    assert_equal '5', first_result.service_id 
+    assert_equal '5', first_result.service_id
     assert_equal 'Purolator Express 9AM', first_result.service_name
-  
+
     surcharges = first_result.surcharges
     assert_equal 2, surcharges.count
     surcharge = surcharges[1]
@@ -49,24 +49,24 @@ class ClientTest  < Test::Unit::TestCase
     assert_equal 'HST', surcharge.name
     assert_equal '7.04', surcharge.amount
   end
-  
+
   def test_parse_quotes_returns_an_empty_array_and_trap_e_shipper_error_message
     client = EShipper::Client.instance
     xml_path = "#{File.dirname(__FILE__)}/../support/error.xml"
     doc = Nokogiri::XML(File.open(xml_path))
     Nokogiri.stubs(:XML).returns doc
-    
+
     result = client.parse_quotes({})
     assert result.empty?
-    assert !client.last_response.errors.empty?
+    refute_empty client.last_response.errors
   end
-  
+
   def test_parse_shipping_returns_an_array_of_shippings
     client = EShipper::Client.instance
     xml_path = "#{File.dirname(__FILE__)}/../support/shipping.xml"
     doc = Nokogiri::XML(File.open(xml_path))
     Nokogiri.stubs(:XML).returns doc
-    
+
     result = client.parse_shipping({})
     assert result.is_a?(EShipper::ShippingReply)
     assert_equal '2065293', result.order_id
@@ -94,75 +94,75 @@ class ClientTest  < Test::Unit::TestCase
     xml_path = "#{File.dirname(__FILE__)}/../support/error.xml"
     doc = Nokogiri::XML(File.open(xml_path))
     Nokogiri.stubs(:XML).returns doc
-    
+
     result = client.parse_shipping({})
-    assert !result
-    assert !client.last_response.errors.empty?
+    refute result
+    refute_empty client.last_response.errors
   end
-  
+
   def test_last_response_returns_last_response
     client = EShipper::Client.instance
     response = EShipper::Response.new('quote', '')
     client.responses << response
-    
+
     assert_equal response, client.last_response
   end
-  
+
   def test_validate_last_response_returns_false_if_last_response_contains_errors
-    client = EShipper::Client.instance 
+    client = EShipper::Client.instance
     response = EShipper::Response.new('quote', '')
-    response.errors = ['Java Error: out of memory'] 
+    response.errors = ['Java Error: out of memory']
     client.responses << response
-    
-    assert !client.validate_last_response
+
+    refute client.validate_last_response
   end
-  
+
   def test_validate_last_response_returns_false_if_last_response_contains_empty_xml_result_data
-    client = EShipper::Client.instance 
+    client = EShipper::Client.instance
     response = EShipper::Response.new('quote', '')
     client.responses << response
-    
-    assert !client.validate_last_response
+
+    refute client.validate_last_response
   end
 
   def test_validate_last_response_returns_true_if_last_response_contains_no_errors
-    client = EShipper::Client.instance 
+    client = EShipper::Client.instance
     response = EShipper::Response.new('quote', 'good xml response')
     client.responses << response
-    
+
     assert client.validate_last_response
   end
-  
+
   def test_cancel_shipping_returns_the_status_of_the_cancellation_and_information
     client = EShipper::Client.instance
     xml_path = "#{File.dirname(__FILE__)}/../support/cancel_shipping.xml"
     doc = Nokogiri::XML(File.open(xml_path))
     Nokogiri.stubs(:XML).returns doc
-    
+
     result = client.cancel_shipping({})
     assert result.is_a?(EShipper::CancelReply)
     assert_equal '383363', result.order_id
     assert_equal 'Order has been cancelled!', result.message
     assert_equal 'CANCELLED', result.status
   end
-  
+
   def test_cancel_shipping_returns_nil_and_trap_e_shipper_error_message
     client = EShipper::Client.instance
     xml_path = "#{File.dirname(__FILE__)}/../support/error.xml"
     doc = Nokogiri::XML(File.open(xml_path))
     Nokogiri.stubs(:XML).returns doc
-    
+
     result = client.cancel_shipping({})
-    assert !result
-    assert !client.last_response.errors.empty?
+    refute result
+    refute_empty client.last_response.errors
   end
-  
+
   def test_order_information_returns_the_status_of_the_order
     client = EShipper::Client.instance
     xml_path = "#{File.dirname(__FILE__)}/../support/order_information.xml"
     doc = Nokogiri::XML(File.open(xml_path))
     Nokogiri.stubs(:XML).returns doc
-    
+
     result = client.order_information({})
     assert result.is_a?(EShipper::InformationReply)
     assert_equal '949986', result.order_id
@@ -173,15 +173,15 @@ class ClientTest  < Test::Unit::TestCase
     assert_equal 'READY FOR SHIPPING', second_history_status.name
     assert_equal "2010-03-29 14:35:10.0", second_history_status.date
   end
-    
+
   def test_order_information_returns_nil_and_trap_e_shipper_error_message
     client = EShipper::Client.instance
     xml_path = "#{File.dirname(__FILE__)}/../support/error.xml"
     doc = Nokogiri::XML(File.open(xml_path))
     Nokogiri.stubs(:XML).returns doc
-    
+
     result = client.order_information({})
-    assert !result
-    assert !client.last_response.errors.empty?
+    refute result
+    refute_empty client.last_response.errors
   end
 end

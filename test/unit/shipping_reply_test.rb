@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class ShippingReplyTest  < Test::Unit::TestCase
+class ShippingReplyTest  < MiniTest::Test
 
   def test_valid_shipping_reply
     shipping_reply = EShipper::ShippingReply.new({:order_id => '123'})

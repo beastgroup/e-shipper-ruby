@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class CodTest  < Test::Unit::TestCase
+class CodTest  < MiniTest::Test
   
   def setup
     address = {:id => "234", :company => "Healthwave", :address1 => "185 Rideau Street", :address2=>"Second Floor",

@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class RequestTest  < Test::Unit::TestCase
+class RequestTest  < MiniTest::Test
   def test_prepare_assigning_request_attrs
     request = EShipper::Request.new
     assert_equal [], request.packages
@@ -36,12 +36,12 @@ class RequestTest  < Test::Unit::TestCase
         :quantity => '100', :unitPrice => '1000.00'}]
     
     request.prepare! options
-    assert_not_nil request.from
-    assert_not_nil request.to
-    assert_not_nil request.pickup
-    assert_not_nil request.service_id
-    assert_not_nil request.packages
-    assert_not_nil request.references
-    assert_not_nil request.invoice
+    refute_nil request.from
+    refute_nil request.to
+    refute_nil request.pickup
+    refute_nil request.service_id
+    refute_nil request.packages
+    refute_nil request.references
+    refute_nil request.invoice
   end
 end
