@@ -2,8 +2,8 @@ module EShipper
   class Package < OpenStruct
 
     POSSIBLE_FIELDS = [
-      :length, :width, :height, :weight,
-      :type, :freightClass, :nmfcCode, :insuranceAmount, 
+      :length, :width, :height, :weight, :weightOz,
+      :type, :freightClass, :nmfcCode, :insuranceAmount,
       :codAmount, :description
     ]
 
