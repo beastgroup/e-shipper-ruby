@@ -8,20 +8,20 @@ module EShipper
       options[:ShippingRequest].merge!(:serviceId => @service_id) if @service_id
 
       builder = Nokogiri::XML::Builder.new do |xml|
-        xml.EShipper(:version => "3.0.0", :xmlns => "http://www.eshipper.net/XMLSchema", 
+        xml.EShipper(:version => "3.0.0", :xmlns => "http://www.eshipper.net/XMLSchema",
             :username => client.username, :password => client.password) do
-          
-          xml.ShippingRequest(options[:ShippingRequest]) do 
+
+          xml.ShippingRequest(options[:ShippingRequest]) do
 
             xml.From(@from.attributes) if @from
             xml.To(@to.attributes) if @to
-            
+
             if @cod
               xml.COD(:paymentType => @cod.payment_type) do
 				        xml.CODReturnAddress(@cod.return_address)
               end
             end
-            
+
             unless @packages.empty?
               xml.Packages(options[:Packages]) do
                 @packages.each do |package|
@@ -29,10 +29,10 @@ module EShipper
                 end
               end
             end
-          
+
             xml.Pickup(@pickup.attributes) if @pickup
             xml.Payment(options[:Payment])
-            
+
             unless @references.empty?
               @references.each do |reference|
                 xml.Reference(reference.attributes)
@@ -40,7 +40,8 @@ module EShipper
             end
 
             if @invoice
-              bill_to = @to.attributes.merge!(:name => @pickup[:contactName])
+              bill_to = @to.attributes
+              bill_to.merge!(:name => @pickup[:contactName]) if @pickup
 
               xml.CustomsInvoice('brokerName' => @invoice.broker_name,
                 'contactCompany' => @invoice.contact_company,
