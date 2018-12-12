@@ -40,7 +40,7 @@ module EShipper
             end
 
             if @invoice
-              bill_to = @to.attributes
+              bill_to = @from.attributes.merge(name: @from.company)
               bill_to.merge!(:name => @pickup[:contactName]) if @pickup
 
               xml.CustomsInvoice('brokerName' => @invoice.broker_name,
