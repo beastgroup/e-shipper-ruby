@@ -5,9 +5,9 @@ class RequestTest  < MiniTest::Test
     request = EShipper::Request.new
     assert_equal [], request.packages
     assert_equal [], request.references
-  
+
     options = {}
-    options[:from] = {:id => "123", :company => "fake company", :address1 => "650 CIT Drive", 
+    options[:from] = {:id => "123", :company => "fake company", :address1 => "650 CIT Drive",
       :city => "Livingston", :state => "ON", :zip => "L4J7Y9", :country => "CA",
       :phone => '888-888-8888', :attention => 'fake attention', :email => 'eshipper@gmail.com'}
 
@@ -16,7 +16,7 @@ class RequestTest  < MiniTest::Test
       :phone => '888-888-8888', :attention => 'fake attention', :email => 'eshipper@gmail.com'}
 
     t = Time.now + 5 * 24 * 60 * 60 # 5 days from now
-  
+
     options[:pickup] = {:contactName => "Test Name", :phoneNumber => "888-888-8888", :pickupDate => t.strftime("%Y-%m-%d"),
         :pickupTime => t.strftime("%H:%M"), :closingTime => (t+2*60*60).strftime("%H:%M"), :location => "Front Door"}
 
@@ -24,7 +24,7 @@ class RequestTest  < MiniTest::Test
 
     options[:packages] = [{:length => "15", :width => "10", :height => "12", :weight => "10",
       :insuranceAmount => "120", :codAmount => "120"}]
-   
+
     options[:references] = [{:name => "Vitamonthly", :code => "123"}]
 
     options[:invoice] = { :broker_name => 'John Doe', :contact_company => 'MERITCON INC',
@@ -32,9 +32,9 @@ class RequestTest  < MiniTest::Test
       :dutiable => 'true', :duty_tax_to => 'receiver'
     }
 
-    options[:items] = [{:code => '1234', :description => 'Laptop computer', :originCountry =>  'US', 
-        :quantity => '100', :unitPrice => '1000.00'}]
-    
+    options[:items] = [{:code => '1234', :description => 'Laptop computer', :originCountry =>  'US',
+        :quantity => '100', :unitPrice => '1000.00', :skuCode => '1234'}]
+
     request.prepare! options
     refute_nil request.from
     refute_nil request.to

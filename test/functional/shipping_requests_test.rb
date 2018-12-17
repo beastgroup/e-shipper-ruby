@@ -60,7 +60,8 @@ class ShippingRequestsTest  < MiniTest::Test
         description: 'Laptop computer',
         originCountry:  'US',
         quantity: '100',
-        unitPrice: '1000.00'
+        unitPrice: '1000.00',
+        skuCode: '1234'
       }]
     }
 
