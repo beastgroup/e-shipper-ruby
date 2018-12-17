@@ -13,7 +13,7 @@ module EShipper
       client = EShipper::Client.instance
 
 	  builder = Nokogiri::XML::Builder.new do |xml|
-        xml.send(:'EShipper', :version => "3.0.0", :'xmlns:es' => "http://www.eshipper.net/XMLSchema", 
+        xml.send(:'EShipper', :version => "3.1.0", :'xmlns:es' => "http://www.eshipper.net/XMLSchema", 
             :username => client.username, :password => client.password) do
 
           xml.ShipmentCancelRequest do
